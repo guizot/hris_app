@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hris_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:hris_app/features/auth/presentation/pages/home_page.dart';
 import 'package:hris_app/features/auth/presentation/pages/sign_up_page.dart';
+import 'package:hris_app/features/auth/presentation/widgets/custom_button.dart';
 import 'package:hris_app/features/auth/presentation/widgets/custom_text_field.dart';
 
 class SignInPage extends StatefulWidget {
@@ -15,13 +17,11 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sign In'),
-      ),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
@@ -44,43 +44,100 @@ class _SignInPageState extends State<SignInPage> {
               child: CircularProgressIndicator(),
             );
           }
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                CustomTextField(
-                  controller: _emailController,
-                  hintText: 'Email',
-                ),
-                const SizedBox(height: 16),
-                CustomTextField(
-                  controller: _passwordController,
-                  hintText: 'Password',
-                  obscureText: true,
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    context.read<AuthBloc>().add(
-                          SignInEvent(
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                          ),
-                        );
-                  },
-                  child: const Text('Sign In'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const SignUpPage(),
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  const SizedBox(height: 100),
+                  Image.asset('assets/icons/logo.png', height: 100),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Welcome',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Log in to your account',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 32),
+                  CustomTextField(
+                    controller: _emailController,
+                    labelText: 'Work Email',
+                  ),
+                  const SizedBox(height: 16),
+                  CustomTextField(
+                    controller: _passwordController,
+                    labelText: 'Password',
+                    obscureText: _obscureText,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscureText ? FontAwesomeIcons.eyeSlash : FontAwesomeIcons.eye,
                       ),
-                    );
-                  },
-                  child: const Text('Don\'t have an account? Sign up'),
-                ),
-              ],
+                      onPressed: () {
+                        setState(() {
+                          _obscureText = !_obscureText;
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {},
+                      child: const Text('Forgot Password?'),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  CustomButton(
+                    text: 'Log In',
+                    onPressed: () {
+                      context.read<AuthBloc>().add(
+                            SignInEvent(
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                            ),
+                          );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomButton(
+                    text: 'Log In with Biometrics',
+                    onPressed: () {},
+                    isOutlined: true,
+                    icon: const Icon(FontAwesomeIcons.fingerprint),
+                  ),
+                  const SizedBox(height: 32),
+                  const Text('OR'),
+                  const SizedBox(height: 32),
+                  CustomButton(
+                    text: 'Continue with Google',
+                    onPressed: () {},
+                    isOutlined: true,
+                    icon: const Icon(FontAwesomeIcons.google),
+                  ),
+                  const SizedBox(height: 16),
+                  CustomButton(
+                    text: 'Continue with Microsoft',
+                    onPressed: () {},
+                    isOutlined: true,
+                    icon: const Icon(FontAwesomeIcons.microsoft),
+                  ),
+                  const SizedBox(height: 32),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const SignUpPage(),
+                        ),
+                      );
+                    },
+                    child: const Text('Don\'t have an account? Sign Up'),
+                  ),
+                ],
+              ),
             ),
           );
         },
