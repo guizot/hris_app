@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hris_app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:hris_app/features/auth/presentation/pages/home_page.dart';
 import 'package:hris_app/features/auth/presentation/pages/sign_up_page.dart';
 import 'package:hris_app/features/auth/presentation/widgets/custom_text_field.dart';
 
@@ -23,7 +24,13 @@ class _SignInPageState extends State<SignInPage> {
       ),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is AuthFailure) {
+          if (state is AuthSuccess) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => const HomePage(),
+              ),
+            );
+          } else if (state is AuthFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),

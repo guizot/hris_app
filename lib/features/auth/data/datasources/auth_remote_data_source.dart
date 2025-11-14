@@ -1,3 +1,4 @@
+import 'package:hris_app/core/error/exception.dart';
 import 'package:hris_app/features/auth/data/models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
@@ -19,9 +20,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String email,
     required String password,
   }) async {
-    // TODO: Implement signIn
     await Future.delayed(const Duration(seconds: 1));
-    return const UserModel(id: '1', name: 'Test User', email: 'test@test.com');
+    if (email == 'test@test.com') {
+      return const UserModel(id: '1', name: 'Test User', email: 'test@test.com');
+    } else {
+      throw ServerException();
+    }
   }
 
   @override
@@ -30,8 +34,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String email,
     required String password,
   }) async {
-    // TODO: Implement signUp
     await Future.delayed(const Duration(seconds: 1));
-    return UserModel(id: '1', name: name, email: email);
+    if (email == 'test@test.com') {
+      return UserModel(id: '1', name: name, email: email);
+    } else {
+      throw ServerException();
+    }
   }
 }
