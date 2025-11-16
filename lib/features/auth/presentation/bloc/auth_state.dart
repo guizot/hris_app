@@ -28,3 +28,14 @@ class AuthFailure extends AuthState {
   @override
   List<Object> get props => [message];
 }
+
+class Authenticated extends AuthState {
+  final User user;
+
+  const Authenticated({required this.user});
+
+  @override
+  List<Object> get props => [user];
+}
+
+class Unauthenticated extends AuthState {}

@@ -1,5 +1,5 @@
-import 'package:hris_app/core/error/exception.dart';
-import 'package:hris_app/features/auth/data/models/user_model.dart';
+import 'package:hantera/core/error/exception.dart';
+import 'package:hantera/features/auth/data/models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<UserModel> signIn({
@@ -22,9 +22,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }) async {
     await Future.delayed(const Duration(seconds: 1));
     if (email == 'test@test.com') {
-      return const UserModel(id: '1', name: 'Test User', email: 'test@test.com');
+      return const UserModel(id: '1', name: 'Test User', email: 'test@test.com', password: 'password');
     } else {
-      throw ServerException();
+      throw ServerException('Invalid credentials');
     }
   }
 
@@ -36,9 +36,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }) async {
     await Future.delayed(const Duration(seconds: 1));
     if (email == 'test@test.com') {
-      return UserModel(id: '1', name: name, email: email);
+      return UserModel(id: '1', name: name, email: email, password: password);
     } else {
-      throw ServerException();
+      throw ServerException('Email already exists');
     }
   }
 }

@@ -1,11 +1,11 @@
 {
-    "name": "hris_app",
-    "short_name": "hris_app",
+    "name": "Hantera",
+    "short_name": "Hantera",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "SaaS Human Resource Application",
+    "description": "Hantera - SaaS Human Resource Application",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

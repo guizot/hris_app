@@ -1,7 +1,7 @@
 
-import 'package:hris_app/core/error/failure.dart';
+import 'package:hantera/core/error/failure.dart';
 import 'package:dartz/dartz.dart';
-import 'package:hris_app/features/auth/domain/entities/user.dart';
+import 'package:hantera/features/auth/domain/entities/user.dart';
 
 abstract class AuthRepository {
   Future<Either<Failure, User>> signIn({
@@ -14,4 +14,8 @@ abstract class AuthRepository {
     required String email,
     required String password,
   });
+
+  Future<Either<Failure, void>> logout();
+  
+  Future<User?> getCurrentUser();
 }

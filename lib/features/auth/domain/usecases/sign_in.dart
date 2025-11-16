@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hris_app/core/error/failure.dart';
-import 'package:hris_app/core/usecases/usecase.dart';
-import 'package:hris_app/features/auth/domain/entities/user.dart';
-import 'package:hris_app/features/auth/domain/repositories/auth_repository.dart';
+import 'package:hantera/core/error/failure.dart';
+import 'package:hantera/core/usecases/usecase.dart';
+import 'package:hantera/features/auth/domain/entities/user.dart';
+import 'package:hantera/features/auth/domain/repositories/auth_repository.dart';
 
 class SignIn implements UseCase<User, SignInParams> {
   final AuthRepository repository;
