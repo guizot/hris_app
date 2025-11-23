@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import '../core/constant/routes_values.dart';
-import 'traveler/traveler.dart';
-import 'phrases/phrases.dart';
-import 'trip/trip.dart';
-import 'packing/packing.dart';
+
+import 'home_tab.dart';
+import 'timeline/timeline_tab_page.dart';
+import 'notification_tab.dart';
+import 'profile_tab.dart';
+import 'record_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,209 +13,167 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final GlobalKey<TripPageState> tripPageKey = GlobalKey<TripPageState>();
-  final GlobalKey<TravelerPageState> travelerPageKey = GlobalKey<TravelerPageState>();
-  final GlobalKey<PackingPageState> packingPageKey = GlobalKey<PackingPageState>();
-  final GlobalKey<PhrasesPageState> phrasesPageKey = GlobalKey<PhrasesPageState>();
-
   int currentPageIndex = 0;
-  String titlePage = "Trip";
-  // String? imageBytes = 'https://vetmarlborough.co.nz/wp-content/uploads/cat-facts.jpg';
+  String titlePage = "Home";
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    
     return Scaffold(
         appBar: AppBar(
           title: Text(titlePage),
           backgroundColor: Theme.of(context).colorScheme.surface,
           surfaceTintColor: Colors.transparent,
           centerTitle: true,
-          // leading: Container(
-          //   margin: const EdgeInsets.only(left: 21.0),
-          //   child: GestureDetector(
-          //     onTap: () {
-          //       // Aksi saat ditekan
-          //     },
-          //     child: Container(
-          //       decoration: BoxDecoration(
-          //         shape: BoxShape.circle,
-          //         color: Theme.of(context).hoverColor,
-          //         border: Border.all(
-          //           color: Theme.of(context).colorScheme.shadow,
-          //         ),
-          //       ),
-          //       child: Center(
-          //         child: (imageBytes != null && imageBytes!.isNotEmpty)
-          //             ? ClipOval(
-          //           child: Image.network(
-          //             imageBytes!,
-          //             width: 34,
-          //             height: 34,
-          //             fit: BoxFit.cover,
-          //           ),
-          //         )
-          //             : const Icon(Icons.person, size: 18),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          actions: [
-            Container(
-              margin: const EdgeInsets.only(right: 8.0),
-              child: IconButton(
-                icon: const Icon(Icons.add_circle_outline_sharp),
-                tooltip: 'Add',
-                onPressed: () {
-                  if(currentPageIndex == 0) {
-                    Navigator.pushNamed(context, RoutesValues.tripAdd).then((_) {
-                      tripPageKey.currentState?.refreshData();
-                    });
-                  }
-                  else if(currentPageIndex == 1) {
-                    Navigator.pushNamed(context, RoutesValues.travelerAdd).then((_) {
-                      travelerPageKey.currentState?.refreshData();
-                    });
-                  }
-                  else if(currentPageIndex == 2) {
-                    Navigator.pushNamed(context, RoutesValues.packingAdd).then((_) {
-                      packingPageKey.currentState?.refreshData();
-                    });
-                  }
-                  else if(currentPageIndex == 3) {
-                    Navigator.pushNamed(context, RoutesValues.languageAdd).then((_) {
-                      phrasesPageKey.currentState?.refreshData();
-                    });
-                  }
-                },
-              ),
-            )
-          ],
         ),
         bottomNavigationBar: Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.center,
           children: [
-            NavigationBar(
-              backgroundColor: Theme.of(context).colorScheme.surface,
-              indicatorColor: Theme.of(context).colorScheme.shadow,
-              onDestinationSelected: (int index) {
-                setState(() {
-                  currentPageIndex = index;
-                  if(index == 0) {
-                    titlePage = "Trip";
-                  }
-                  else if(index == 1) {
-                    titlePage = "Traveler";
-                  }
-                  else if(index == 2) {
-                    titlePage = "Packing";
-                  }
-                  else if(index == 3) {
-                    titlePage = "Phrases";
-                  }
-                });
-              },
-              elevation: 8.0,
-              selectedIndex: currentPageIndex,
-              destinations: <Widget>[
-                NavigationDestination(
-                  selectedIcon: SvgPicture.asset(
-                  'assets/svg/trip.svg',
-                    width: 20,
-                    height: 20,
-                    colorFilter: ColorFilter.mode(
-                        Theme.of(context).iconTheme.color ?? Colors.grey,
-                        BlendMode.srcIn
-                    ),
+            Container(
+              height: 80,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+              ),
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(bottom: 20, left: 8, right: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Home
+                  _buildNavItem(
+                    context,
+                    icon: Icons.home_outlined,
+                    selectedIcon: Icons.home,
+                    isSelected: currentPageIndex == 0,
+                    onTap: () => setState(() {
+                      currentPageIndex = 0;
+                      titlePage = "Home";
+                    }),
                   ),
-                  icon: SvgPicture.asset(
-                  'assets/svg/trip.svg',
-                    width: 20,
-                    height: 20,
-                    colorFilter: ColorFilter.mode(
-                        Theme.of(context).iconTheme.color ?? Colors.grey,
-                        BlendMode.srcIn
-                    ),
+                  
+                  // Timeline
+                  _buildNavItem(
+                    context,
+                    icon: Icons.timeline_outlined,
+                    selectedIcon: Icons.timeline,
+                    isSelected: currentPageIndex == 1,
+                    onTap: () => setState(() {
+                      currentPageIndex = 1;
+                      titlePage = "Timeline";
+                    }),
                   ),
-                  label: 'Trip',
-                ),
-                NavigationDestination(
-                  selectedIcon: SvgPicture.asset(
-                      'assets/svg/traveler.svg',
-                      width: 20,
-                      height: 20,
-                    colorFilter: ColorFilter.mode(
-                        Theme.of(context).iconTheme.color ?? Colors.grey,
-                        BlendMode.srcIn
-                    ),
+                  
+                  // Record (placeholder - same size as other items for equal spacing)
+                  const SizedBox(width: 64, height: 64),
+                  
+                  // Notification
+                  _buildNavItem(
+                    context,
+                    icon: Icons.notifications_outlined,
+                    selectedIcon: Icons.notifications,
+                    isSelected: currentPageIndex == 3,
+                    onTap: () => setState(() {
+                      currentPageIndex = 3;
+                      titlePage = "Notification";
+                    }),
                   ),
-                  icon: SvgPicture.asset(
-                      'assets/svg/traveler.svg',
-                      width: 20,
-                      height: 20,
-                      colorFilter: ColorFilter.mode(
-                          Theme.of(context).iconTheme.color ?? Colors.grey,
-                          BlendMode.srcIn
+                  
+                  // Profile
+                  _buildNavItem(
+                    context,
+                    icon: Icons.person_outline,
+                    selectedIcon: Icons.person,
+                    isSelected: currentPageIndex == 4,
+                    onTap: () => setState(() {
+                      currentPageIndex = 4;
+                      titlePage = "Profile";
+                    }),
+                  ),
+                ],
+              ),
+            ),
+
+            
+            // Prominent Record Button
+            Positioned(
+              bottom: 20,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const RecordPage()),
+                  );
+                },
+                child: Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: isDarkMode ? Colors.white : Colors.black,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
                       ),
+                    ],
                   ),
-                  label: 'Traveler',
+                  child: Icon(
+                    Icons.fiber_manual_record,
+                    size: 32,
+                    color: isDarkMode ? Colors.black : Colors.white,
+                  ),
                 ),
-                NavigationDestination(
-                  selectedIcon: SvgPicture.asset(
-                      'assets/svg/packing.svg',
-                      width: 20,
-                      height: 20,
-                    colorFilter: ColorFilter.mode(
-                        Theme.of(context).iconTheme.color ?? Colors.grey,
-                        BlendMode.srcIn
-                    ),
-                  ),
-                  icon: SvgPicture.asset(
-                      'assets/svg/packing.svg',
-                      width: 20,
-                      height: 20,
-                    colorFilter: ColorFilter.mode(
-                        Theme.of(context).iconTheme.color ?? Colors.grey,
-                        BlendMode.srcIn
-                    ),
-                  ),
-                  label: 'Packing',
-                ),
-                NavigationDestination(
-                  selectedIcon: SvgPicture.asset(
-                      'assets/svg/phrases.svg',
-                      width: 20,
-                      height: 20,
-                    colorFilter: ColorFilter.mode(
-                        Theme.of(context).iconTheme.color ?? Colors.grey,
-                        BlendMode.srcIn
-                    ),
-                  ),
-                  icon: SvgPicture.asset(
-                      'assets/svg/phrases.svg',
-                      width: 20,
-                      height: 20,
-                    colorFilter: ColorFilter.mode(
-                        Theme.of(context).iconTheme.color ?? Colors.grey,
-                        BlendMode.srcIn
-                    ),
-                  ),
-                  label: 'Phrases',
-                ),
-              ],
-            )
+              ),
+            ),
           ],
         ),
         body: Container(
           color: Theme.of(context).colorScheme.surface,
           child: Builder(
             builder: (_) {
-              if (currentPageIndex == 0) return TripPageProvider(pageKey: tripPageKey);
-              if (currentPageIndex == 1) return TravelerPageProvider(pageKey: travelerPageKey);
-              if (currentPageIndex == 2) return PackingPageProvider(pageKey: packingPageKey);
-              if (currentPageIndex == 3) return PhrasesPageProvider(pageKey: phrasesPageKey);
+              if (currentPageIndex == 0) return const HomeTab();
+              if (currentPageIndex == 1) return const TimelineTabPage();
+              if (currentPageIndex == 3) return const NotificationTab();
+              if (currentPageIndex == 4) return const ProfileTab();
+
               return const SizedBox.shrink();
             },
           ),
         )
+    );
+  }
+
+  Widget _buildNavItem(
+    BuildContext context, {
+    required IconData icon,
+    required IconData selectedIcon,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(32),
+      child: Container(
+        width: 64,
+        height: 64,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: isSelected 
+            ? Theme.of(context).colorScheme.shadow
+            : Colors.transparent,
+        ),
+        child: Icon(
+          isSelected ? selectedIcon : icon,
+          size: 32,
+          color: isSelected
+            ? Theme.of(context).colorScheme.primary
+            : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+        ),
+      ),
     );
   }
 

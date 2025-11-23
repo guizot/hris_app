@@ -106,7 +106,7 @@ class MyApp extends StatelessWidget {
             ),
             themeMode: themeService.currentThemeMode,
             initialRoute: hasCompletedOnboarding
-                ? RoutesValues.home
+                ? RoutesValues.login
                 : RoutesValues.onboarding,
             onGenerateRoute: RouteService.generate,
             builder: (context, child) {

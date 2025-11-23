@@ -37,13 +37,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       placeholderLabel: 'Packing Illustration',
       illustrationAsset: 'assets/illustrations/Packing.svg',
     ),
-    _OnboardingSlide(
-      title: 'Languages & Phrases',
-      description:
-      'Save useful phrases and quick translations for your journey.',
-      placeholderLabel: 'Phrases Illustration',
-      illustrationAsset: 'assets/illustrations/Phrases.svg',
-    ),
+
   ];
 
   @override
@@ -56,7 +50,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     final settingsBox = Hive.box('settingBox');
     await settingsBox.put('onboardingCompleted', true);
     if (!mounted) return;
-    Navigator.of(context).pushNamedAndRemoveUntil(RoutesValues.home, (route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil(RoutesValues.login, (route) => false);
   }
 
   void _onNextPressed() {

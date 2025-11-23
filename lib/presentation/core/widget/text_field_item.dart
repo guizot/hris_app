@@ -14,6 +14,7 @@ class TextFieldItem extends StatefulWidget {
     this.inputType = TextInputType.text,
     this.preText = "",
     this.pickerMode = CupertinoDatePickerMode.date,
+    this.isObscure = false,
     required this.controller
   });
 
@@ -22,6 +23,7 @@ class TextFieldItem extends StatefulWidget {
   final TextInputType inputType;
   final String preText;
   final CupertinoDatePickerMode pickerMode;
+  final bool isObscure;
   final TextEditingController controller;
 
   @override
@@ -95,6 +97,7 @@ class _TextFieldItemState extends State<TextFieldItem> {
                 Expanded(
                   child: TextFormField(
                     controller: widget.controller,
+                    obscureText: widget.isObscure,
                     style: const TextStyle(fontSize: 14),
                     decoration: InputDecoration(
                       hintText: 'input ${widget.title.toLowerCase()}',
