@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hantera/presentation/core/constant/routes_values.dart';
 import 'package:hantera/presentation/core/widget/text_field_item.dart';
 
@@ -30,12 +31,7 @@ class _LoginPageState extends State<LoginPage> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
-        if (!didPop) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            RoutesValues.home,
-            (route) => false,
-          );
-        }
+        SystemNavigator.pop(animated: true);
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
