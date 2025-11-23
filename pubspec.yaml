@@ -109,6 +109,7 @@ flutter:
     - assets/illustrations/Trip.svg
 
     - assets/illustrations/Packing.svg
+    - assets/images/
 
 
 flutter_launcher_icons:
