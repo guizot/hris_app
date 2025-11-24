@@ -10,8 +10,8 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   Map<String, String> _selectedCompany = {
-      "name": "Globex Corporation",
-      "logo": "https://ui-avatars.com/api/?name=Globex+Corporation&background=random"
+      "name": "Soylent Corp",
+      "logo": "https://ui-avatars.com/api/?name=Soylent+Corp&background=random"
     };
   
   final List<Map<String, String>> _companies = [
@@ -67,25 +67,31 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget _buildAttendanceInfo(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).hoverColor,
+    return Material(
+      color: Theme.of(context).hoverColor,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(48),
-        border: Border.all(
+        side: BorderSide(
           color: Theme.of(context).colorScheme.shadow,
           width: 1,
         ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildAttendanceItem(context, "Date", "24 Nov 2025", Icons.calendar_today),
-          Container(width: 1, height: 40, color: Theme.of(context).colorScheme.shadow),
-          _buildAttendanceItem(context, "Clock In", "08:00", Icons.login),
-          Container(width: 1, height: 40, color: Theme.of(context).colorScheme.shadow),
-          _buildAttendanceItem(context, "Clock Out", "--:--", Icons.logout),
-        ],
+      child: InkWell(
+        onTap: () {},
+        borderRadius: BorderRadius.circular(48),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildAttendanceItem(context, "Date", "24 Nov 2025", Icons.calendar_today),
+              Container(width: 1, height: 40, color: Theme.of(context).colorScheme.shadow),
+              _buildAttendanceItem(context, "Clock In", "08:00", Icons.login),
+              Container(width: 1, height: 40, color: Theme.of(context).colorScheme.shadow),
+              _buildAttendanceItem(context, "Clock Out", "--:--", Icons.logout),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -95,11 +101,11 @@ class _HomeTabState extends State<HomeTab> {
       children: [
         Row(
           children: [
-            Icon(icon, size: 14, color: Theme.of(context).colorScheme.primary),
-            const SizedBox(width: 4),
+            Icon(icon, size: 12),
+            const SizedBox(width: 8),
             Text(
               label,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
             ),
@@ -108,8 +114,6 @@ class _HomeTabState extends State<HomeTab> {
         const SizedBox(height: 4),
         Text(
           value,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -119,87 +123,95 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget _buildUserInfo(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).hoverColor,
+    return Material(
+      color: Theme.of(context).hoverColor,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(48),
-        border: Border.all(
+        side: BorderSide(
           color: Theme.of(context).colorScheme.shadow,
           width: 1,
         ),
       ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.5),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(Icons.person, size: 24),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'John Doe',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+      child: InkWell(
+        onTap: () {},
+        borderRadius: BorderRadius.circular(48),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.5),
+                  shape: BoxShape.circle,
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  'john.doe@example.com',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
-                      ),
+                child: const Icon(Icons.person, size: 24),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'John Doe',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'john.doe@example.com',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                          ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 
   Widget _buildCompanySelector(BuildContext context) {
-    return InkWell(
-      onTap: () => _showCompanyBottomSheet(context),
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-      padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Theme.of(context).hoverColor,
-          borderRadius: BorderRadius.circular(32),
-          border: Border.all(
-            color: Theme.of(context).colorScheme.shadow,
-            width: 1,
-          ),
+    return Material(
+      color: Theme.of(context).hoverColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(32),
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.shadow,
+          width: 1,
         ),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 16,
-              backgroundImage: NetworkImage(_selectedCompany['logo']!),
-              backgroundColor: Colors.transparent,
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                _selectedCompany['name']!,
+      ),
+      child: InkWell(
+        onTap: () => _showCompanyBottomSheet(context),
+        borderRadius: BorderRadius.circular(32),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 16,
+                backgroundImage: NetworkImage(_selectedCompany['logo']!),
+                backgroundColor: Colors.transparent,
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  _selectedCompany['name']!,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
+                ),
               ),
-            ),
-            Icon(
-              Icons.keyboard_arrow_down,
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
-            ),
-          ],
+              Icon(
+                Icons.keyboard_arrow_down,
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+              ),
+            ],
+          ),
         ),
       ),
     );
