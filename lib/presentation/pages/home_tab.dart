@@ -44,6 +44,42 @@ class _HomeTabState extends State<HomeTab> {
     {'name': 'Employees', 'icon': 'assets/svg_feature/employees_icon.svg'},
   ];
 
+  final List<Map<String, String>> _attendanceHistory = [
+    {
+      "date": "23 November 2025",
+      "clockIn": "08:00",
+      "clockOut": "17:00",
+    },
+    {
+      "date": "22 November 2025",
+      "clockIn": "08:15",
+      "clockOut": "17:10",
+    }
+  ];
+
+  final List<Map<String, String>> _newEmployees = [
+    {
+      "name": "Alice Smith",
+      "role": "UI Designer",
+      "photo": "https://ui-avatars.com/api/?name=Alice+Smith&background=random"
+    },
+    {
+      "name": "Bob Jones",
+      "role": "Developer",
+      "photo": "https://ui-avatars.com/api/?name=Bob+Jones&background=random"
+    },
+    {
+      "name": "Charlie Day",
+      "role": "Product Owner",
+      "photo": "https://ui-avatars.com/api/?name=Charlie+Day&background=random"
+    },
+    {
+      "name": "Diana Prince",
+      "role": "Manager",
+      "photo": "https://ui-avatars.com/api/?name=Diana+Prince&background=random"
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -58,8 +94,31 @@ class _HomeTabState extends State<HomeTab> {
             _buildCompanySelector(context),
             const SizedBox(height: 12),
             _buildAttendanceInfo(context),
+            const SizedBox(height: 30),
+            _buildSectionHeader(
+              context, 
+              "Main Menu", 
+              onSeeAll: () {},
+            ),
             const SizedBox(height: 16),
-            _buildFeatureGrid(context)
+            _buildFeatureGrid(context),
+            const SizedBox(height: 30),
+            _buildSectionHeader(
+              context, 
+              "Your Attendance", 
+              onSeeAll: () {},
+            ),
+            const SizedBox(height: 16),
+            _buildAttendanceHistory(context),
+            const SizedBox(height: 30),
+            _buildSectionHeader(
+              context, 
+              "New Employees", 
+              onSeeAll: () {},
+            ),
+            const SizedBox(height: 16),
+            _buildNewEmployees(context),
+            const SizedBox(height: 30), // Bottom padding
           ],
         ),
       ),
@@ -352,6 +411,193 @@ class _HomeTabState extends State<HomeTab> {
           ),
         );
       },
+    );
+  }
+  Widget _buildAttendanceHistory(BuildContext context) {
+    return Column(
+      children: _attendanceHistory.map((history) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Material(
+            color: Theme.of(context).hoverColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.shadow,
+                width: 1,
+              ),
+            ),
+            child: InkWell(
+              onTap: () {},
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          history['date']!,
+                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          "Present",
+                          style: Theme.of(context).textTheme.bodyMedium
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        _buildHistoryTimeItem(context, "Clock In", history['clockIn']!),
+                        const SizedBox(width: 24),
+                        Container(width: 1, height: 40, color: Theme.of(context).colorScheme.shadow),
+                        const SizedBox(width: 24),
+                        _buildHistoryTimeItem(context, "Clock Out", history['clockOut']!),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildSectionHeader(BuildContext context, String title, {VoidCallback? onSeeAll}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          if (onSeeAll != null)
+            Material(
+              color: Theme.of(context).hoverColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(
+                  color: Theme.of(context).colorScheme.shadow,
+                  width: 1,
+                ),
+              ),
+              child: InkWell(
+                onTap: onSeeAll,
+                borderRadius: BorderRadius.circular(12),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Text(
+                    "See All",
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHistoryTimeItem(BuildContext context, String label, String time) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          label,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+              ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          time,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+              ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNewEmployees(BuildContext context) {
+    return SizedBox(
+      height: 150,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: _newEmployees.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 12),
+        itemBuilder: (context, index) {
+          final employee = _newEmployees[index];
+          return Material(
+            color: Theme.of(context).hoverColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.shadow,
+                width: 1,
+              ),
+            ),
+            child: InkWell(
+              onTap: () {},
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                width: 120,
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.5),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.person, size: 30),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      employee['name']!,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      employee['role']!,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                            fontSize: 11,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
