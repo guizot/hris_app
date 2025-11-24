@@ -56,11 +56,65 @@ class _HomeTabState extends State<HomeTab> {
             _buildUserInfo(context),
             const SizedBox(height: 12),
             _buildCompanySelector(context),
+            const SizedBox(height: 12),
+            _buildAttendanceInfo(context),
             const SizedBox(height: 16),
             _buildFeatureGrid(context)
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildAttendanceInfo(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).hoverColor,
+        borderRadius: BorderRadius.circular(48),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.shadow,
+          width: 1,
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildAttendanceItem(context, "Date", "24 Nov 2025", Icons.calendar_today),
+          Container(width: 1, height: 40, color: Theme.of(context).colorScheme.shadow),
+          _buildAttendanceItem(context, "Clock In", "08:00", Icons.login),
+          Container(width: 1, height: 40, color: Theme.of(context).colorScheme.shadow),
+          _buildAttendanceItem(context, "Clock Out", "--:--", Icons.logout),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAttendanceItem(BuildContext context, String label, String value, IconData icon) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Icon(icon, size: 14, color: Theme.of(context).colorScheme.primary),
+            const SizedBox(width: 4),
+            Text(
+              label,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                  ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+      ],
     );
   }
 
