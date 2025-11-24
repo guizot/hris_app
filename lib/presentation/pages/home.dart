@@ -27,6 +27,7 @@ class _HomePageState extends State<HomePage> {
           surfaceTintColor: Colors.transparent,
           centerTitle: true,
         ),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         bottomNavigationBar: Stack(
           clipBehavior: Clip.none,
           alignment: Alignment.center,

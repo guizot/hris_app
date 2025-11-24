@@ -110,6 +110,7 @@ flutter:
 
     - assets/illustrations/Packing.svg
     - assets/images/
+    - assets/svg_feature/
 
 
 flutter_launcher_icons:
