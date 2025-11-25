@@ -487,7 +487,7 @@ class _HomeTabState extends State<HomeTab> {
             Material(
               color: Theme.of(context).hoverColor,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(48),
                 side: BorderSide(
                   color: Theme.of(context).colorScheme.shadow,
                   width: 1,
@@ -495,7 +495,7 @@ class _HomeTabState extends State<HomeTab> {
               ),
               child: InkWell(
                 onTap: onSeeAll,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(48),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Text(
