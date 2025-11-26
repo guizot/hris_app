@@ -174,7 +174,7 @@ class _HomeTabState extends State<HomeTab> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(48),
         side: BorderSide(
-          color: Theme.of(context).colorScheme.shadow,
+          color: Theme.of(context).colorScheme.primary.withOpacity(0.12),
           width: 1,
         ),
       ),
@@ -287,8 +287,8 @@ class _HomeTabState extends State<HomeTab> {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(32),
-            border: Border.all(
-              color: Theme.of(context).colorScheme.shadow,
+                border: Border.all(
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.12),
               width: 1,
             ),
           ),
@@ -371,7 +371,7 @@ class _HomeTabState extends State<HomeTab> {
                             border: Border.all(
                               color: isSelected 
                                 ? Theme.of(context).colorScheme.primary 
-                                : Theme.of(context).colorScheme.shadow,
+                                : Theme.of(context).colorScheme.primary.withOpacity(0.12),
                               width: 1,
                             ),
                           ),
@@ -430,11 +430,11 @@ class _HomeTabState extends State<HomeTab> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
             side: BorderSide(
-              color: Theme.of(context).colorScheme.shadow,
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.12),
               width: 1,
             ),
           ),
-          child: InkWell(
+            child: InkWell(
             onTap: () {},
             borderRadius: BorderRadius.circular(16),
             child: Container(
@@ -481,7 +481,7 @@ class _HomeTabState extends State<HomeTab> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
               side: BorderSide(
-                color: Theme.of(context).colorScheme.shadow,
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.12),
                 width: 1,
               ),
             ),
