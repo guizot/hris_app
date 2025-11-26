@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'home_tab.dart';
 import 'timeline/timeline_tab_page.dart';
+import 'timeline/new_post_page.dart';
 import 'notification_tab.dart';
 import 'profile_tab.dart';
 import 'record_page.dart';
@@ -17,6 +18,17 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int currentPageIndex = 0;
   String titlePage = "Home";
+  int? _timelineInitialTabIndex;
+  int _timelineSubTabIndex = 0; // Track which sub-tab is active in Timeline
+
+  void navigateToTimelineTab(int tabIndex) {
+    setState(() {
+      currentPageIndex = 1;
+      titlePage = "Timeline";
+      _timelineInitialTabIndex = tabIndex;
+      _timelineSubTabIndex = tabIndex;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +41,21 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Theme.of(context).colorScheme.surface,
           surfaceTintColor: Colors.transparent,
           centerTitle: true,
+          actions: currentPageIndex == 1 && _timelineSubTabIndex == 0
+              ? [
+                  IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const NewPostPage(),
+                        ),
+                      );
+                    },
+                  ),
+                ]
+              : null,
         ),
         backgroundColor: Theme.of(context).colorScheme.surface,
         bottomNavigationBar: Stack(
@@ -149,8 +176,30 @@ class _HomePageState extends State<HomePage> {
           color: Theme.of(context).colorScheme.surface,
           child: Builder(
             builder: (_) {
-              if (currentPageIndex == 0) return const HomeTab();
-              if (currentPageIndex == 1) return const TimelineTabPage();
+              if (currentPageIndex == 0) {
+                return HomeTab(
+                  onNavigateToTimeline: navigateToTimelineTab,
+                );
+              }
+              if (currentPageIndex == 1) {
+                final widget = TimelineTabPage(
+                  initialTabIndex: _timelineInitialTabIndex,
+                  onTabChanged: (index) {
+                    setState(() {
+                      _timelineSubTabIndex = index;
+                    });
+                  },
+                );
+                // Reset the initial tab index after building
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) {
+                    setState(() {
+                      _timelineInitialTabIndex = null;
+                    });
+                  }
+                });
+                return widget;
+              }
               if (currentPageIndex == 3) return const NotificationTab();
               if (currentPageIndex == 4) return const ProfileTab();
 

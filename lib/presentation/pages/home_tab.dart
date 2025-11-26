@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:hantera/presentation/core/service/theme_service.dart'; // adjust path if needed
 
 class HomeTab extends StatefulWidget {
-  const HomeTab({super.key});
+  final Function(int)? onNavigateToTimeline;
+  
+  const HomeTab({super.key, this.onNavigateToTimeline});
 
   @override
   State<HomeTab> createState() => _HomeTabState();
@@ -86,6 +88,87 @@ class _HomeTabState extends State<HomeTab> {
     },
   ];
 
+  final List<Map<String, String>> _timeline = [
+    {
+      "title": "Project Kickoff",
+      "date": "25 Nov 2025",
+      "time": "09:00 AM",
+      "type": "meeting"
+    },
+    {
+      "title": "Code Review",
+      "date": "25 Nov 2025",
+      "time": "02:00 PM",
+      "type": "review"
+    },
+    {
+      "title": "Sprint Planning",
+      "date": "26 Nov 2025",
+      "time": "10:00 AM",
+      "type": "meeting"
+    },
+    {
+      "title": "Team Standup",
+      "date": "26 Nov 2025",
+      "time": "09:30 AM",
+      "type": "meeting"
+    },
+  ];
+
+  final List<Map<String, String>> _announcements = [
+    {
+      "title": "Holiday Schedule",
+      "description": "Office will be closed on Dec 25-26",
+      "date": "20 Nov 2025",
+      "priority": "high"
+    },
+    {
+      "title": "New Parking Policy",
+      "description": "Updated parking guidelines effective next month",
+      "date": "18 Nov 2025",
+      "priority": "medium"
+    },
+    {
+      "title": "Team Building Event",
+      "description": "Join us for team building activities this Friday",
+      "date": "15 Nov 2025",
+      "priority": "low"
+    },
+    {
+      "title": "System Maintenance",
+      "description": "Scheduled maintenance on Saturday 2-4 AM",
+      "date": "22 Nov 2025",
+      "priority": "high"
+    },
+  ];
+
+  final List<Map<String, String>> _termsPolicy = [
+    {
+      "title": "Privacy Policy",
+      "description": "How we collect and use your personal data",
+      "lastUpdated": "01 Nov 2025",
+      "version": "2.1"
+    },
+    {
+      "title": "Terms of Service",
+      "description": "Agreement between you and the company",
+      "lastUpdated": "15 Oct 2025",
+      "version": "3.0"
+    },
+    {
+      "title": "Code of Conduct",
+      "description": "Expected behavior and workplace standards",
+      "lastUpdated": "10 Nov 2025",
+      "version": "1.5"
+    },
+    {
+      "title": "Data Security Policy",
+      "description": "Guidelines for handling sensitive information",
+      "lastUpdated": "05 Nov 2025",
+      "version": "2.0"
+    },
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -152,6 +235,28 @@ class _HomeTabState extends State<HomeTab> {
                 ),
                 const SizedBox(height: 16),
                 _buildNewEmployees(context),
+                const SizedBox(height: 30),
+                _buildSectionHeader(
+                  context, 
+                  "Announcements", 
+                  onSeeAll: () {
+                    // Navigate to Timeline tab with Announcement sub-tab selected
+                    widget.onNavigateToTimeline?.call(1);
+                  },
+                ),
+                const SizedBox(height: 16),
+                _buildAnnouncements(context),
+                const SizedBox(height: 30),
+                _buildSectionHeader(
+                  context, 
+                  "Terms & Policy", 
+                  onSeeAll: () {
+                    // Navigate to Timeline tab with Terms & Policy sub-tab selected
+                    widget.onNavigateToTimeline?.call(2);
+                  },
+                ),
+                const SizedBox(height: 16),
+                _buildTermsPolicy(context),
                 const SizedBox(height: 120),
               ],
             ),
@@ -647,6 +752,192 @@ class _HomeTabState extends State<HomeTab> {
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                             fontSize: 11,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildAnnouncements(BuildContext context) {
+    return SizedBox(
+      height: 150,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: _announcements.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 12),
+        itemBuilder: (context, index) {
+          final announcement = _announcements[index];
+          final priorityColor = announcement['priority'] == 'high'
+              ? Colors.red
+              : announcement['priority'] == 'medium'
+                  ? Colors.orange
+                  : Colors.blue;
+          
+          return Material(
+            color: Theme.of(context).hoverColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.12),
+                width: 1,
+              ),
+            ),
+            child: InkWell(
+              onTap: () {},
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                width: 220,
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: priorityColor,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            announcement['title']!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Expanded(
+                      child: Text(
+                        announcement['description']!,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                              fontSize: 11,
+                            ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      announcement['date']!,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4),
+                            fontSize: 10,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildTermsPolicy(BuildContext context) {
+    return SizedBox(
+      height: 150,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: _termsPolicy.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 12),
+        itemBuilder: (context, index) {
+          final policy = _termsPolicy[index];
+          return Material(
+            color: Theme.of(context).hoverColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.12),
+                width: 1,
+              ),
+            ),
+            child: InkWell(
+              onTap: () {},
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                width: 200,
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primaryContainer,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            Icons.description,
+                            size: 18,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            'v${policy['version']!}',
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      policy['title']!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                    ),
+                    const SizedBox(height: 4),
+                    Expanded(
+                      child: Text(
+                        policy['description']!,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                              fontSize: 11,
+                            ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Updated: ${policy['lastUpdated']!}',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4),
+                            fontSize: 10,
                           ),
                     ),
                   ],

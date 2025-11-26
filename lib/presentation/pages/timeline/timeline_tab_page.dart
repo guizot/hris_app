@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'timeline_content_tab.dart';
 import 'announcement_tab.dart';
 import 'terms_policy_tab.dart';
+import 'new_post_page.dart';
 
 class TimelineTabPage extends StatefulWidget {
-  const TimelineTabPage({super.key});
+  final int? initialTabIndex;
+  final Function(int)? onTabChanged;
+  
+  const TimelineTabPage({super.key, this.initialTabIndex, this.onTabChanged});
 
   @override
   State<TimelineTabPage> createState() => _TimelineTabPageState();
 }
 
 class _TimelineTabPageState extends State<TimelineTabPage> {
-  int selectedTabIndex = 0;
+  late int selectedTabIndex;
   late PageController _pageController;
   late ScrollController _tabScrollController;
   final List<GlobalKey> _tabKeys = List.generate(3, (_) => GlobalKey());
@@ -19,8 +23,16 @@ class _TimelineTabPageState extends State<TimelineTabPage> {
   @override
   void initState() {
     super.initState();
+    selectedTabIndex = widget.initialTabIndex ?? 0;
     _pageController = PageController(initialPage: selectedTabIndex);
     _tabScrollController = ScrollController();
+    
+    // Scroll to selected tab after build
+    if (widget.initialTabIndex != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        scrollToSelectedTab();
+      });
+    }
   }
 
   @override
@@ -46,6 +58,7 @@ class _TimelineTabPageState extends State<TimelineTabPage> {
     setState(() => selectedTabIndex = index);
     _pageController.jumpToPage(index);
     scrollToSelectedTab();
+    widget.onTabChanged?.call(index);
   }
 
   Widget buildTab(String label, int index, {Key? key}) {
@@ -108,6 +121,7 @@ class _TimelineTabPageState extends State<TimelineTabPage> {
               onPageChanged: (index) {
                 setState(() => selectedTabIndex = index);
                 scrollToSelectedTab();
+                widget.onTabChanged?.call(index);
               },
               children: const [
                 TimelineContentTab(),
