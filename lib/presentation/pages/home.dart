@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
             ),
 
             
-            // Prominent Record Button
+            // Prominent Record Tab (matches nav items but larger & accented)
             Positioned(
               bottom: 20,
               child: GestureDetector(
@@ -111,24 +111,34 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(builder: (_) => const RecordPage()),
                   );
                 },
-                child: Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: isDarkMode ? Colors.white : Colors.black,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(40),
+                  child: BackdropFilter(
+                    filter: ui.ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                    child: Container(
+                      width: 72,
+                      height: 72,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.95),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Theme.of(context).colorScheme.primary.withOpacity(0.18),
+                            blurRadius: 12,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.primary.withOpacity(0.14),
+                          width: 1,
+                        ),
                       ),
-                    ],
-                  ),
-                  child: Icon(
-                    Icons.fiber_manual_record,
-                    size: 32,
-                    color: isDarkMode ? Colors.black : Colors.white,
+                      child: Icon(
+                        Icons.fiber_manual_record,
+                        size: 36,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                    ),
                   ),
                 ),
               ),
