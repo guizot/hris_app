@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 
 import 'home_tab.dart';
@@ -21,6 +23,7 @@ class _HomePageState extends State<HomePage> {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     
     return Scaffold(
+      extendBody: true,
         appBar: AppBar(
           title: Text(titlePage),
           backgroundColor: Theme.of(context).colorScheme.surface,
@@ -35,7 +38,7 @@ class _HomePageState extends State<HomePage> {
             Container(
               height: 80,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
+                color: Colors.transparent,
               ),
               alignment: Alignment.center,
               padding: const EdgeInsets.only(bottom: 20, left: 8, right: 8),
@@ -155,24 +158,34 @@ class _HomePageState extends State<HomePage> {
     required bool isSelected,
     required VoidCallback onTap,
   }) {
+    final neutralColor = Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.2);
+    final accentColor = Theme.of(context).colorScheme.primaryContainer.withOpacity(0.25);
+    final bgColor = isSelected ? accentColor : neutralColor;
+    final iconColor = isSelected 
+      ? Theme.of(context).colorScheme.primary
+      : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6);
+    final useIcon = isSelected ? selectedIcon : icon;
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(32),
-      child: Container(
-        width: 64,
-        height: 64,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: isSelected 
-            ? Theme.of(context).colorScheme.shadow
-            : Colors.transparent,
-        ),
-        child: Icon(
-          isSelected ? selectedIcon : icon,
-          size: 32,
-          color: isSelected
-            ? Theme.of(context).colorScheme.primary
-            : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(32),
+        child: BackdropFilter(
+          filter: ui.ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: bgColor,
+            ),
+            child: Icon(
+              useIcon,
+              size: 32,
+              color: iconColor,
+            ),
+          ),
         ),
       ),
     );

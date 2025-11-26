@@ -1,5 +1,9 @@
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:palette_generator/palette_generator.dart';
+import 'package:provider/provider.dart';
+import 'package:hantera/presentation/core/service/theme_service.dart'; // adjust path if needed
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -14,6 +18,8 @@ class _HomeTabState extends State<HomeTab> {
       "logo": "https://ui-avatars.com/api/?name=Soylent+Corp&background=random"
     };
   
+  Color? _companyBgColor;
+
   final List<Map<String, String>> _companies = [
     {
       "name": "Globex Corporation",
@@ -81,46 +87,83 @@ class _HomeTabState extends State<HomeTab> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadCompanyColor());
+  }
+
+  Future<void> _loadCompanyColor() async {
+    try {
+      final palette = await PaletteGenerator.fromImageProvider(
+        NetworkImage(_selectedCompany['logo']!),
+      );
+      if (mounted && palette.dominantColor != null) {
+        final companyColor = palette.dominantColor!.color;
+        setState(() {
+          _companyBgColor = companyColor;
+        });
+        // Update app-wide theme accent
+        final themeService = Provider.of<ThemeService>(context, listen: false);
+        final hex = '#${companyColor.value.toRadixString(16).padLeft(8, '0').substring(2).toUpperCase()}';
+        themeService.colorSeed = hex;
+      }
+    } catch (e) {
+      // Fallback silently
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       color: Theme.of(context).colorScheme.surface,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildUserInfo(context),
-            const SizedBox(height: 12),
-            _buildCompanySelector(context),
-            const SizedBox(height: 12),
-            _buildAttendanceInfo(context),
-            const SizedBox(height: 30),
-            _buildSectionHeader(
-              context, 
-              "Main Menu", 
-              onSeeAll: () {},
+      child: Stack(
+        children: [
+          // Scrolling content behind
+          SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 100),
+                // _buildUserInfo(context),
+                // const SizedBox(height: 16),
+                _buildAttendanceInfo(context),
+                const SizedBox(height: 30),
+                _buildSectionHeader(
+                  context, 
+                  "Main Menu", 
+                  onSeeAll: () {},
+                ),
+                const SizedBox(height: 16),
+                _buildFeatureGrid(context),
+                const SizedBox(height: 30),
+                _buildSectionHeader(
+                  context, 
+                  "Your Attendance", 
+                  onSeeAll: () {},
+                ),
+                const SizedBox(height: 16),
+                _buildAttendanceHistory(context),
+                const SizedBox(height: 30),
+                _buildSectionHeader(
+                  context, 
+                  "New Employees", 
+                  onSeeAll: () {},
+                ),
+                const SizedBox(height: 16),
+                _buildNewEmployees(context),
+                const SizedBox(height: 100),
+              ],
             ),
-            const SizedBox(height: 16),
-            _buildFeatureGrid(context),
-            const SizedBox(height: 30),
-            _buildSectionHeader(
-              context, 
-              "Your Attendance", 
-              onSeeAll: () {},
-            ),
-            const SizedBox(height: 16),
-            _buildAttendanceHistory(context),
-            const SizedBox(height: 30),
-            _buildSectionHeader(
-              context, 
-              "New Employees", 
-              onSeeAll: () {},
-            ),
-            const SizedBox(height: 16),
-            _buildNewEmployees(context),
-            const SizedBox(height: 30), // Bottom padding
-          ],
-        ),
+          ),
+          // Sticky company selector only
+          Positioned(
+            top: 16.0,
+            left: 16.0,
+            right: 16.0,
+            child: _buildCompanySelector(context),
+          ),
+        ],
       ),
     );
   }
@@ -201,7 +244,7 @@ class _HomeTabState extends State<HomeTab> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.5),
+                  color: Theme.of(context).colorScheme.primaryContainer,
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.person, size: 24),
@@ -235,41 +278,54 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget _buildCompanySelector(BuildContext context) {
+    final bgColor = _companyBgColor ?? Theme.of(context).colorScheme.primaryContainer;
     return Material(
-      color: Theme.of(context).hoverColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(32),
-        side: BorderSide(
-          color: Theme.of(context).colorScheme.shadow,
-          width: 1,
-        ),
-      ),
+      color: Colors.transparent,
       child: InkWell(
         onTap: () => _showCompanyBottomSheet(context),
         borderRadius: BorderRadius.circular(32),
         child: Container(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 16,
-                backgroundImage: NetworkImage(_selectedCompany['logo']!),
-                backgroundColor: Colors.transparent,
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Text(
-                  _selectedCompany['name']!,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(32),
+            border: Border.all(
+              color: Theme.of(context).colorScheme.shadow,
+              width: 1,
+            ),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(32),
+            child: BackdropFilter(
+              filter: ui.ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(32),
+                  color: bgColor.withOpacity(0.25),
+                ),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 16,
+                      backgroundColor: bgColor.withOpacity(0.5),
+                      backgroundImage: NetworkImage(_selectedCompany['logo']!),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        _selectedCompany['name']!,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
+                    ),
+                    Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                    ),
+                  ],
                 ),
               ),
-              Icon(
-                Icons.keyboard_arrow_down,
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -303,6 +359,7 @@ class _HomeTabState extends State<HomeTab> {
                           setState(() {
                             _selectedCompany = company;
                           });
+                          _loadCompanyColor();
                           Navigator.pop(context);
                         },
                         borderRadius: BorderRadius.circular(32),
@@ -357,6 +414,7 @@ class _HomeTabState extends State<HomeTab> {
 
   Widget _buildFeatureGrid(BuildContext context) {
     return GridView.builder(
+      padding: EdgeInsets.zero, // This removes the bottom gap
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -485,7 +543,7 @@ class _HomeTabState extends State<HomeTab> {
           ),
           if (onSeeAll != null)
             Material(
-              color: Theme.of(context).hoverColor,
+              color: Theme.of(context).colorScheme.primaryContainer,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(48),
                 side: BorderSide(
@@ -564,7 +622,7 @@ class _HomeTabState extends State<HomeTab> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.5),
+                        color: Theme.of(context).colorScheme.primaryContainer,
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(Icons.person, size: 30),

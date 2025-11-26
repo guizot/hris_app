@@ -3,6 +3,7 @@ import '../../../data/core/const/shared_preferences_values.dart';
 import '../../../data/datasource/shared/shared_preferences_data_source.dart';
 import '../constant/theme_service_values.dart';
 import '../widget/no_transitions_builder.dart';
+import '../extension/color_extension.dart';
 
 class ThemeService extends ChangeNotifier {
 
@@ -57,11 +58,7 @@ class ThemeService extends ChangeNotifier {
   }
 
   ThemeData currentThemeData(String brightness) {
-    Map<String, ThemeData> themeObject = {};
-    for (int i = 0; i < ThemeServiceValues.colorString.length; i++) {
-      themeObject[ThemeServiceValues.colorString[i]] = getThemeData(brightness, ThemeServiceValues.colorString[i]);
-    }
-    return themeObject[colorSeed]!;
+    return getThemeData(brightness, colorSeed);
   }
 
   ThemeData getThemeData(String brightness, String color) {
@@ -81,7 +78,7 @@ class ThemeService extends ChangeNotifier {
     for (int i = 0; i < ThemeServiceValues.colorString.length; i++) {
       colorObject[ThemeServiceValues.colorString[i]] = ThemeServiceValues.colorValue[i];
     }
-    colorTheme = colorObject[color]!;
+    colorTheme = colorObject[color] ?? HexColor(color);
 
     return ThemeData(
       colorSchemeSeed: colorTheme,
