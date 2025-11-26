@@ -116,6 +116,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   FilledButton(
                     onPressed: _onRegisterPressed,
                     style: FilledButton.styleFrom(
+                      backgroundColor: Theme.of(context).iconTheme.color,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
                     child: const Text('Sign Up'),
@@ -135,7 +136,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: Text(
                           'Login',
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
+                            color: Theme.of(context).iconTheme.color,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

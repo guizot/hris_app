@@ -89,6 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: _onLoginPressed,
                       style: FilledButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
+                        backgroundColor: Theme.of(context).iconTheme.color,
                       ),
                       child: const Text('Login'),
                     ),
@@ -107,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             'Sign Up',
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.primary,
+                              color: Theme.of(context).iconTheme.color,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
