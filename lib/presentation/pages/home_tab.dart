@@ -152,7 +152,7 @@ class _HomeTabState extends State<HomeTab> {
                 ),
                 const SizedBox(height: 16),
                 _buildNewEmployees(context),
-                const SizedBox(height: 100),
+                const SizedBox(height: 120),
               ],
             ),
           ),
@@ -547,7 +547,7 @@ class _HomeTabState extends State<HomeTab> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(48),
                 side: BorderSide(
-                  color: Theme.of(context).colorScheme.shadow,
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.12),
                   width: 1,
                 ),
               ),
@@ -606,7 +606,7 @@ class _HomeTabState extends State<HomeTab> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
               side: BorderSide(
-                color: Theme.of(context).colorScheme.shadow,
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.12),
                 width: 1,
               ),
             ),
@@ -614,7 +614,7 @@ class _HomeTabState extends State<HomeTab> {
               onTap: () {},
               borderRadius: BorderRadius.circular(16),
               child: Container(
-                width: 120,
+                width: 150,
                 padding: const EdgeInsets.all(12),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
