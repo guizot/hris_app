@@ -120,16 +120,16 @@ class _HomePageState extends State<HomePage> {
                       height: 72,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.95),
+                        color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.60),
                         boxShadow: [
                           BoxShadow(
-                            color: Theme.of(context).colorScheme.primary.withOpacity(0.18),
+                            color: Theme.of(context).colorScheme.primary.withOpacity(0.12),
                             blurRadius: 12,
                             offset: const Offset(0, 6),
                           ),
                         ],
                         border: Border.all(
-                          color: Theme.of(context).colorScheme.primary.withOpacity(0.14),
+                          color: Theme.of(context).colorScheme.primary.withOpacity(0.10),
                           width: 1,
                         ),
                       ),
