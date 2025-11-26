@@ -137,14 +137,14 @@ class _HomeTabState extends State<HomeTab> {
                 const SizedBox(height: 16),
                 _buildFeatureGrid(context),
                 const SizedBox(height: 30),
-                _buildSectionHeader(
-                  context, 
-                  "Your Attendance", 
-                  onSeeAll: () {},
-                ),
-                const SizedBox(height: 16),
-                _buildAttendanceHistory(context),
-                const SizedBox(height: 30),
+                // _buildSectionHeader(
+                //   context, 
+                //   "Your Attendance", 
+                //   onSeeAll: () {},
+                // ),
+                // const SizedBox(height: 16),
+                // _buildAttendanceHistory(context),
+                // const SizedBox(height: 30),
                 _buildSectionHeader(
                   context, 
                   "New Employees", 
